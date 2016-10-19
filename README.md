@@ -79,7 +79,7 @@ RightSignature.reusable_templates(page: 2, per_page: 5)
 RightSignature.reusable_templates(search: "founder-signer1")
 
 # Fetching a single Reusable Template
-RightSignature.reusable_templates("$reusable_template_id")
+RightSignature.reusable_template("$reusable_template_id")
 
 # Sending a document from a reusable template
 RightSignature.send_document("$reusable_template_id", name: "Agreement", expires_in: 10, roles: [{name: "signer1", signer_name: "Geoff", signer_email: "geoff@rightsignature.com"}], tags: {meetings: "q3", "new-hires": "hr"}, merge_field_values: [{id: "$merge_field_id", value: "Welcome to the team"}], passcode: {question: "secret", answer: "1234"}, shared_with: ["jev@rightsignature.com"], message: "Please sign this employee agreement.")
@@ -99,5 +99,14 @@ RightSignature.me
 RightSignature.revoke_token
 ```
 
-#### API Status
+#### Testing
+* To record any new vcr cassettes you'll have to pass in a legitimate `private_api_token` as an environment variable.  This is filtered out in the resulting file.
+  
+  * `RS_PRIVATE_API_TOKEN=$token bundle exec rspec spec`
+  
+#### Gem Console
+
+* There is a rake task, `rake console` which will configure `RightSignature` with the required configuration attributes and drop you in console.  You will need to create an `.env` file in the root of the project that includes the corresponding configuration secrets that are listed in the `Rakefile`
+
+#### Work in progress
 * This is a work in progress.  The RightSignature for ShareFile API is in an early phase of development and not officially released.  
