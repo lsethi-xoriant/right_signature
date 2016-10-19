@@ -1,0 +1,6 @@
+.bundle
+*.gem
+Gemfile.lock
+*.swp
+*.tmproj
+.env
