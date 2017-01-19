@@ -8,16 +8,9 @@ Design and philosophy inspired by [octokit](https://github.com/octokit/octokit.r
 
 ## Installation
 
-* Note: this will soon be distributed via rubygems
-
 ```
-# Gemfile
+# Install via Bundler
 gem 'right_signature', git: 'git://github.com/rsig/right_signature.git'
-
-# Installing locally
-git clone git://github.com/rsig/right_signature.git
-cd right_signature && bundle
-gem build right_signature.gemspec  && gem install ./right_signature-0.0.1.gem
 ```
 
 ## Configuration
@@ -103,10 +96,18 @@ RightSignature.revoke_token
 * To record any new vcr cassettes you'll have to pass in a legitimate `private_api_token` as an environment variable.  This is filtered out in the resulting file.
   
   * `RS_PRIVATE_API_TOKEN=$token bundle exec rspec spec`
-  
+
+## Building locally
+
+```
+git clone git://github.com/rsig/right_signature.git
+cd right_signature && bundle
+gem build right_signature.gemspec  && gem install ./right_signature-0.0.1.gem
+```
+    
 #### Gem Console
 
 * There is a rake task, `rake console` which will configure `RightSignature` with the required configuration attributes and drop you in console.  You will need to create an `.env` file in the root of the project that includes the corresponding configuration secrets that are listed in the `Rakefile`
 
 #### Work in progress
-* This is a work in progress.  The RightSignature for ShareFile API is in an early phase of development and not officially released.  
+* The RightSignature for ShareFile API is in an early phase of development.
