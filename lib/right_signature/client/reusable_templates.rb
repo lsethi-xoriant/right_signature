@@ -8,9 +8,12 @@ module RightSignature
       def reusable_template(reusable_template_id)
         get "reusable_templates/#{reusable_template_id}"
       end
-
-      def send_document(reusable_template_id, query = {})
-        post "reusable_templates/#{reusable_template_id}/send_document", query
+      
+      %i| send embed |.each do |kind|
+        resource = "#{kind}_document"
+        define_method resource.to_sym do |reusable_template_id, query = {}|
+          post "reusable_templates/#{reusable_template_id}/#{resource}", query
+        end
       end
     end
   end
