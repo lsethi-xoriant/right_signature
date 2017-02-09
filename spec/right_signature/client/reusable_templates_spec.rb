@@ -1,4 +1,5 @@
 require 'helper'
+require_relative 'helpers/reusable_template_helper'
 
 describe RightSignature::Client::ReusableTemplates do
 
@@ -66,7 +67,7 @@ describe RightSignature::Client::ReusableTemplates do
     end
   end
 
-  describe 'send_document', :vcr do
+  context 'cloned documents from a reusable template' do
     let(:body) {
       {
         name: 'Nda',
@@ -75,42 +76,24 @@ describe RightSignature::Client::ReusableTemplates do
         merge_field_values: [{id: '4bc7aaa9-3ffe-4e65-bf5a-9b44d09113a1', value: '111 Jev St, Portland Oregon'}]
       }
     }
+    describe 'send_document', :vcr do
+      include_examples "cloned document from reusable template", :send_document
 
-    it 'errors when an expiry is not incuded' do
-      expect {
-        rs_private_token_client.send_document(reusable_template_id, body.except(:expires_in))
-      }.to raise_error(RightSignature::UnprocessableEntityError, /An expires_in value between 1 and 60 days is required/)
+      it 'creates a document from a reusable template and returns a document' do
+        resp = rs_private_token_client.send_document(reusable_template_id, body)
+        expect(resp).to include_json(document: {})
+        assert_requested :post, rs_api_url(File.join('reusable_templates', reusable_template_id, 'send_document'))
+      end
     end
 
-    it 'errors when roles are not included' do
-      expect {
-        rs_private_token_client.send_document(reusable_template_id, body.except(:roles))
-      }.to raise_error(RightSignature::UnprocessableEntityError, /Missing parameter roles/)
+    describe 'embed_document' do
+      include_examples "cloned document from reusable template", :embed_document
+
+      it 'errows when the height is invalid'
+      it 'errors when the width is invalid'
+      it 'errors when the dimesions are not included'
+      it 'returns a document with embed codes for each signer'
     end
 
-    it 'errors when the name is not included' do
-      expect {
-        rs_private_token_client.send_document(reusable_template_id, body.except(:name))
-      }.to raise_error(RightSignature::UnprocessableEntityError, /Documents Name is required/)
-    end
-
-    it 'errors when the merge field value ids do not match' do
-      body[:merge_field_values] = [{id: 'does-not-exist', value: 'nope'}]
-      expect {
-        rs_private_token_client.send_document(reusable_template_id, body)
-      }.to raise_error(RightSignature::UnprocessableEntityError, /Merge field ids do not match/)
-    end
-
-    it 'errors when the document does not exist' do
-      expect {
-        rs_private_token_client.send_document('123456789', body)
-      }.to raise_error(RightSignature::RecordNotFoundError, /Record not found/)
-    end
-
-    it 'creates a document from a reusable template and returns a document' do
-      resp = rs_private_token_client.send_document(reusable_template_id, body)
-      expect(resp).to include_json(document: {})
-      assert_requested :post, rs_api_url(File.join('reusable_templates', reusable_template_id, 'send_document'))
-    end
   end
 end
