@@ -6,6 +6,7 @@ require 'right_signature/response/render_error'
 require 'right_signature/client/token'
 require 'right_signature/client/users'
 require 'right_signature/client/documents'
+require 'right_signature/client/sending_requests'
 require 'right_signature/client/reusable_templates'
 
 module RightSignature
@@ -15,6 +16,7 @@ module RightSignature
     include RightSignature::Client::Users
     include RightSignature::Client::Token
     include RightSignature::Client::Documents
+    include RightSignature::Client::SendingRequests
     include RightSignature::Client::ReusableTemplates
 
     def initialize(options = {})
