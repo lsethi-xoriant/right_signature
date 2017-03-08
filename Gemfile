@@ -4,6 +4,7 @@ group :development do
   gem 'pry'
   gem 'yard'
   gem 'awesome_print', require: 'ap'
+  gem 'dotenv'
 end
 
 group :test do
